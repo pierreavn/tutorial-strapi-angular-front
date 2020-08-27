@@ -1,0 +1,51 @@
+<div class="container mt-5">
+  <h1>My Super Job Offers</h1>
+
+  <div class="row mt-3">
+
+    <!-- Left Side: Jobs Search and List -->
+    <div class="col-md-5 mb-5">
+      <!-- Search Field -->
+      <div>
+        <input type="text"
+               class="form-control"
+               [(ngModel)]="searchString"
+               (keyup.enter)="submitSearch()"
+               placeholder="Search Job Offers..."
+               autofocus />
+      </div>
+
+      <!-- Jobs List -->
+      <div *ngIf="loading">
+        Loading...
+      </div>
+      <div *ngIf="!loading">
+        <div *ngIf="!jobs.length && page === 1; else jobsList" class="pt-3">
+          No jobs found for this search. Try again
+        </div>
+        <ng-template #jobsList>
+          <!-- Job -->
+          <a [routerLink]="'/job/' + job.id" *ngFor="let job of jobs">
+            <hr/>
+            <h6 class="mb-0">{{job.title}}</h6>
+            <div>{{job.company.name}}</div>
+          </a>
+
+          <!-- Pagination -->
+          <hr/>
+          <div>
+            <button type="button" class="btn btn-outline-secondary btn-sm" (click)="previousPage()" [disabled]="page === 1">Previous</button>
+            <span class="px-4">{{page}}</span>
+            <button type="button" class="btn btn-outline-secondary btn-sm" (click)="nextPage()" [disabled]="!jobs.length">Next</button>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+
+    <!-- Right Side: Job Details -->
+    <div class="col-md-6 offset-md-1">
+      <router-outlet></router-outlet>
+    </div>
+
+  </div>
+</div>
